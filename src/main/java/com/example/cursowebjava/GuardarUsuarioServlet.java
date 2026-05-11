@@ -2,7 +2,7 @@ package com.example.cursowebjava;
 
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.DriverManager;
+
 import java.sql.PreparedStatement;
 
 import javax.servlet.ServletException;
@@ -21,14 +21,12 @@ public class GuardarUsuarioServlet extends HttpServlet {
         String nombre = request.getParameter("nombre");
         String correo = request.getParameter("correo");
 
-        String url = "jdbc:sqlserver://localhost:1433;databaseName=CursoWeb;integratedSecurity=true;encrypt=true;trustServerCertificate=true";
 
         try {
-            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
 
-            Connection conexion = DriverManager.getConnection(url);
+                Connection conexion = ConexionBD.conectar();
 
-            String sql = "INSERT INTO Usuarios(nombre, correo) VALUES (?, ?)";
+            String sql = "INSERT INTO usuarios(nombre, correo) VALUES (?, ?)";
 
             PreparedStatement ps = conexion.prepareStatement(sql);
 
@@ -36,6 +34,8 @@ public class GuardarUsuarioServlet extends HttpServlet {
             ps.setString(2, correo);
 
             ps.executeUpdate();
+
+            conexion.close();
 
             response.setContentType("text/html");
 
